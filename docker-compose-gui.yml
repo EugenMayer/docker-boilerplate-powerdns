@@ -20,18 +20,14 @@ services:
       traefik.http.routers.gui.tls.certresolver: 'default'
       traefik.enable: 'true'
       traefik.port: 80
-    networks:
-      - recursor
   traefik:
     image: ghcr.io/eugenmayer/traefik:2.x
     restart: always
-    networks:
-      - recursor
     environment:
       TRAEFIK_ACME_ENABLE: 'false'
       TRAEFIK_HTTPS_ENABLE: 'false'
-      TRAEFIK_ADMIN_SSL: 'false'
-      TRAEFIK_ADMIN_ENABLE: 'true'
+      #TRAEFIK_ADMIN_SSL: 'false'
+      #TRAEFIK_ADMIN_ENABLE: 'true'
 
       TRAEFIK_DOCKER_EXPOSEDBYDEFAULT: 'false'
       TRAEFIK_DOCKER_ENABLE: 'true'

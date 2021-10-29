@@ -56,17 +56,23 @@ docker-compose up -d
 Clone your repo as stated above
 
 ```
-mkdir -p recursor/custom.d/
-vi recursor/custom.d/toauth.conf
+mkdir -p dnsdist/custom.d/
+vi dnsdist/custom.d/02_private_domain.conf
 ```
 
-Now enter the test-domain you want to offer DNS for. You can have multiple of those statements, be sure to use `+=`
-
-The IP is right until you did not reconfigure `NETWORK`
+Now enter the test-domain you want to offer DNS for. You can have multiple of those statements.
+You can have multiple entries as here, or just one
 
 ```
-forward-zones=intranet.company.net=172.21.0.226:53
+addAction('intranet.company.net', PoolAction('auths'))
+addAction('test.example.net', PoolAction('auths'))
 ```
+
+## Configuration
+
+1. First you register a new user with the GUI
+2. Register the powerDNS auth api `http://auth:8081` and setting the API key using from `PDNS_AUTH_API_KEY`.
+3.
 
 ## Advanced
 
@@ -80,12 +86,3 @@ COMPOSE_FILE=docker-compose.yml
 ```
 
 That's it, the GUI and traefik is no disabled
-
-### Networking
-If you have a collision with the docker-network used in the stack, you can change it in the `.env` file using
-
-```
-NETWORK=10.10.0
-```
-
-Be sure to adjust your `forward-zones` if you do so, so to `10.10.0.226`

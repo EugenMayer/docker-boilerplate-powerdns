@@ -5,37 +5,32 @@ services:
   recursor: # The server to either recurse to public DNS servers or to our own authoritative on for private domains
     image: powerdns/pdns-recursor-45:latest
     restart: always
-    volumes:
-      - ./recursor/recursor.conf:/etc/powerdns/recursor.conf
-      - ./recursor/custom.d/toauth.conf:/etc/powerdns/recursor.d/toauth.conf
     environment:
       - PDNS_RECURSOR_API_KEY
-    ports:
-      - '${DNS_PORT:-53}:53'
-      - '${DNS_PORT:-53}:53/udp'
     depends_on:
       - auth
-    networks:
-      - recursor
   auth: # the server to store our private DNS entries
     image: powerdns/pdns-auth-45:latest
     restart: always
-    networks:
-      recursor:
-        ipv4_address: ${NETWORK:-172.21.0}.226
     volumes:
       - dns-data:/var/lib/powerdns/
     environment:
       - PDNS_AUTH_API_KEY
-
+  dnsdist:
+    image: powerdns/dnsdist-17:latest
+    restart: always
+    ports:
+      - '${DNS_PORT:-53}:53'
+      - '${DNS_PORT:-53}:53/udp'
+    environment:
+      - PDNS_AUTH_API_KEY
+    volumes:
+      - ./dnsdist/01_resolv.conf:/etc/dnsdist/conf.d/01_resolv.conf
+      - ./dnsdist/custom.d/02_private_domain.conf:/etc/dnsdist/conf.d/02_private_domain.conf
+      - ./dnsdist/99_recursor.conf:/etc/dnsdist/conf.d/99_recursor.conf
+    depends_on:
+      - auth
+      - recursor
 volumes:
   # dns zone data
   dns-data:
-
-networks:
-  recursor:
-    ipam:
-      driver: default
-      config:
-        - subnet: ${NETWORK:-172.21.0}.225/29
-          gateway: ${NETWORK:-172.21.0}.225

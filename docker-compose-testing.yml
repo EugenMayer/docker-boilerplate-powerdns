@@ -10,3 +10,7 @@ services:
     ports:
       #- 3053:53
       - '3053:53/udp'
+  recursor:
+    ports:
+      - '4053:53/tcp'
+      - '4053:53/udp'

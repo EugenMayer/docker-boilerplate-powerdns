@@ -2,3 +2,4 @@
 .idea/workspace.xml
 .env
 recursor/custom.d/**
+dnsdist/custom.d/**
