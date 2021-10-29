@@ -26,8 +26,8 @@ services:
     environment:
       TRAEFIK_ACME_ENABLE: 'false'
       TRAEFIK_HTTPS_ENABLE: 'false'
-      TRAEFIK_ADMIN_SSL: 'false'
-      TRAEFIK_ADMIN_ENABLE: 'true'
+      #TRAEFIK_ADMIN_SSL: 'false'
+      #TRAEFIK_ADMIN_ENABLE: 'true'
 
       TRAEFIK_DOCKER_EXPOSEDBYDEFAULT: 'false'
       TRAEFIK_DOCKER_ENABLE: 'true'

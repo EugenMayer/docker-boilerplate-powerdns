@@ -5,8 +5,6 @@ services:
   recursor: # The server to either recurse to public DNS servers or to our own authoritative on for private domains
     image: powerdns/pdns-recursor-45:latest
     restart: always
-    volumes:
-      - ./recursor/recursor.conf:/etc/powerdns/recursor.conf
     environment:
       - PDNS_RECURSOR_API_KEY
     depends_on:
@@ -18,7 +16,7 @@ services:
       - dns-data:/var/lib/powerdns/
     environment:
       - PDNS_AUTH_API_KEY
-  dnsdist: # the server to store our private DNS entries
+  dnsdist:
     image: powerdns/dnsdist-17:latest
     restart: always
     ports:
@@ -29,7 +27,7 @@ services:
     volumes:
       - ./dnsdist/01_resolv.conf:/etc/dnsdist/conf.d/01_resolv.conf
       - ./dnsdist/custom.d/02_private_domain.conf:/etc/dnsdist/conf.d/02_private_domain.conf
-      - ./dnsdist/03_recursor.conf:/etc/dnsdist/conf.d/03_recursor.conf
+      - ./dnsdist/99_recursor.conf:/etc/dnsdist/conf.d/99_recursor.conf
     depends_on:
       - auth
       - recursor
