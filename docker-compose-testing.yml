@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  gui:
+    labels:
+      traefik.http.routers.gui.tls: 'false'
+    ports:
+      - 10080:80
+  auth:
+    ports:
+      #- 3053:53
+      - '3053:53/udp'

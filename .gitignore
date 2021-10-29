@@ -1,0 +1,4 @@
+.idea/php.xml
+.idea/workspace.xml
+.env
+recursor/custom.d/**

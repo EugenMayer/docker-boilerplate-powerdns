@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  traefik:
+    environment:
+      TRAEFIK_ACME_ENABLE: 'true'
+      TRAEFIK_ACME_CHALLENGE: 'dns'
+      TRAEFIK_ADMIN_SSL: 'false'
+      TRAEFIK_ADMIN_ENABLE: 'false'
+
+      TRAEFIK_ACME_CHALLENGE_DNS_PROVIDER: '${TRAEFIK_ACME_CHALLENGE_DNS_PROVIDER}'
+      TRAEFIK_ACME_CHALLENGE_DNS_CREDENTIALS: '${TRAEFIK_ACME_CHALLENGE_DNS_CREDENTIALS}'
+
+      ### basic provider setup
+      TRAEFIK_HTTPS_ENABLE: 'only'
+  gui:
+    labels:
+      traefik.http.routers.gui.tls: 'true'

@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  # see https://github.com/ngoduykhanh/PowerDNS-Admin
+  gui:
+    restart: always
+    image: ngoduykhanh/powerdns-admin:latest
+    environment:
+      # see https://github.com/ngoduykhanh/PowerDNS-Admin/blob/master/configs/docker_config.py#L6
+      SECRET_KEY: ${GUI_SEED_SECRET_KEY}
+      LOCAL_DB_ENABLED: true
+      LDAP_ENABLED: false
+    volumes:
+      - gui-data:/data
+    depends_on:
+      - auth
+    labels:
+      traefik.http.routers.gui.rule: 'Host(`${GUI_DOMAIN}`)'
+      traefik.http.routers.gui.tls: 'false'
+      traefik.http.routers.gui.tls.certresolver: 'default'
+      traefik.enable: 'true'
+      traefik.port: 80
+    networks:
+      - recursor
+  traefik:
+    image: ghcr.io/eugenmayer/traefik:2.x
+    restart: always
+    networks:
+      - recursor
+    environment:
+      TRAEFIK_ACME_ENABLE: 'false'
+      TRAEFIK_HTTPS_ENABLE: 'false'
+      TRAEFIK_ADMIN_SSL: 'false'
+      TRAEFIK_ADMIN_ENABLE: 'true'
+
+      TRAEFIK_DOCKER_EXPOSEDBYDEFAULT: 'false'
+      TRAEFIK_DOCKER_ENABLE: 'true'
+      # if you want to also expose other docker containers in the docker-engine
+      # TRAEFIK_DOCKER_ENABLE: 'true'
+    volumes:
+      - certs:/mnt/certs
+      - filestorage:/mnt/filestorage
+      - acme:/mnt/acme
+      # mount our docker socket so our docker container can be discovered
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:8080
+      - 443:8443
+
+volumes:
+  # gui settings
+  gui-data:
+  # traefik
+  acme:
+  certs:
+  filestorage:

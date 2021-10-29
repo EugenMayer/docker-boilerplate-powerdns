@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  traefik:
+    environment:
+      TRAEFIK_ACME_ENABLE: 'true'
+      TRAEFIK_ACME_CHALLENGE: 'http'
+      TRAEFIK_ADMIN_SSL: 'false'
+      TRAEFIK_ADMIN_ENABLE: 'false'
+      TRAEFIK_HTTPS_ENABLE: 'only'
+      ### basic provider setup
+  gui:
+    labels:
+      traefik.http.routers.gui.tls: 'true'
