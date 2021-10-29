@@ -20,13 +20,9 @@ services:
       traefik.http.routers.gui.tls.certresolver: 'default'
       traefik.enable: 'true'
       traefik.port: 80
-    networks:
-      - recursor
   traefik:
     image: ghcr.io/eugenmayer/traefik:2.x
     restart: always
-    networks:
-      - recursor
     environment:
       TRAEFIK_ACME_ENABLE: 'false'
       TRAEFIK_HTTPS_ENABLE: 'false'
