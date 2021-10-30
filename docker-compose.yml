@@ -7,8 +7,6 @@ services:
     restart: always
     environment:
       - PDNS_RECURSOR_API_KEY
-    depends_on:
-      - auth
   auth: # the server to store our private DNS entries
     image: powerdns/pdns-auth-45:latest
     restart: always
@@ -31,6 +29,7 @@ services:
     depends_on:
       - auth
       - recursor
+
 volumes:
   # dns zone data
   dns-data:

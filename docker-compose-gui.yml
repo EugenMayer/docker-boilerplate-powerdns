@@ -3,7 +3,7 @@ version: '3'
 services:
   # see https://github.com/ngoduykhanh/PowerDNS-Admin
   gui:
-    restart: always
+    restart: unless-stopped
     image: ngoduykhanh/powerdns-admin:latest
     environment:
       # see https://github.com/ngoduykhanh/PowerDNS-Admin/blob/master/configs/docker_config.py#L6
@@ -22,7 +22,7 @@ services:
       traefik.port: 80
   traefik:
     image: ghcr.io/eugenmayer/traefik:2.x
-    restart: always
+    restart: unless-stopped
     environment:
       TRAEFIK_ACME_ENABLE: 'false'
       TRAEFIK_HTTPS_ENABLE: 'false'
