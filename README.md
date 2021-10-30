@@ -1,6 +1,6 @@
 ## WAT
 
-PowerDNS based setup to run your private DNS Server for your private Domains
+PowerDNS based setup to run your private DNS Server for your private Domains.
 
 Includes:
 
