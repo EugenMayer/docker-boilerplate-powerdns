@@ -8,8 +8,8 @@ services:
     environment:
       # see https://github.com/ngoduykhanh/PowerDNS-Admin/blob/master/configs/docker_config.py#L6
       SECRET_KEY: ${GUI_SEED_SECRET_KEY}
-      LOCAL_DB_ENABLED: true
-      LDAP_ENABLED: false
+      LOCAL_DB_ENABLED: 'true'
+      LDAP_ENABLED: 'false'
     volumes:
       - gui-data:/data
     depends_on:
@@ -26,8 +26,6 @@ services:
     environment:
       TRAEFIK_ACME_ENABLE: 'false'
       TRAEFIK_HTTPS_ENABLE: 'false'
-      #TRAEFIK_ADMIN_SSL: 'false'
-      #TRAEFIK_ADMIN_ENABLE: 'true'
 
       TRAEFIK_DOCKER_EXPOSEDBYDEFAULT: 'false'
       TRAEFIK_DOCKER_ENABLE: 'true'
