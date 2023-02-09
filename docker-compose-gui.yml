@@ -5,7 +5,7 @@ services:
   gui:
     restart: always
     # DO NOT upgrade to latest - it duplicates the domain suffixes on save
-    image: ngoduykhanh/powerdns-admin:v.0.3.0
+    image: ngoduykhanh/powerdns-admin:v0.3.0
     environment:
       # see https://github.com/ngoduykhanh/PowerDNS-Admin/blob/master/configs/docker_config.py#L6
       SECRET_KEY: ${GUI_SEED_SECRET_KEY}
