@@ -106,13 +106,15 @@ dig @localhost -p 3053 test.local
 ```
 This give you an idea, what we have what for - and that dnsdist should be what you expose to the public.
 
-## Configure private DNS
+## Customization / Production
+
+### Configure private DNS
 
 Clone your repo as stated above
 
 ```
 mkdir -p dnsdist/custom.d/
-vi dnsdist/custom.d/02_private_domain.conf
+vi custom.d/dnsdist/02_private_domain.conf
 ```
 
 Now enter the test-domain you want to offer DNS for. You can have multiple of those statements.
@@ -122,4 +124,12 @@ You can have multiple entries as here, or just one
 addAction('intranet.company.net', PoolAction('auths'))
 addAction('test.example.net', PoolAction('auths'))
 ```
+
+### Change your upstream resolver
+
+```bash
+vim .env
+RECURSOR_DNS=1.0.0.1
+```
+
 
