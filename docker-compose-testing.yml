@@ -1,16 +1,22 @@
-version: '3'
-
 services:
-  gui:
-    labels:
-      traefik.http.routers.gui.tls: 'false'
-    ports:
-      - 10080:80
   auth:
     ports:
-      #- 3053:53
+      - '3053:53/tcp'
       - '3053:53/udp'
+      # webserver
+      - '38081:8081'
   recursor:
     ports:
       - '4053:53/tcp'
       - '4053:53/udp'
+      # webserver
+      - '48082:8082'
+  dnsdist:
+    volumes:
+      # our default private domain for test.local
+      - ./examples/custom.d/dnsdist/02_private_domain.conf:/etc/dnsdist/conf.d/02_private_domain.conf
+    ports:
+      - '5053:53/tcp'
+      - '5053:53/udp'
+      # webserver
+      - '58083:8083'

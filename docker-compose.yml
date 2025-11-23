@@ -1,10 +1,20 @@
-version: '3'
-
 services:
-  # see https://github.com/PowerDNS/pdns/blob/master/Docker-README.md
-  recursor: # The server to either recurse to public DNS servers or to our own authoritative on for private domains
-    # DO yet not upgrade - powerdns upgrade gui (latest) cannot authenticate against 48+
-    image: powerdns/pdns-recursor-47:latest
+  # the server to store our private DNS entries
+  auth:
+    # https://github.com/PowerDNS/pdns/blob/master/Dockerfile-auth
+    # https://hub.docker.com/r/powerdns/pdns-auth-50/tags
+    image: powerdns/pdns-auth-50:5.0.1
+    restart: always
+    volumes:
+      - dns-data:/var/lib/powerdns/
+    environment:
+      - PDNS_AUTH_API_KEY
+  # The server to either recurse to public DNS servers or to our own authoritative on for private domains
+  recursor:
+    # see https://github.com/PowerDNS/pdns/blob/master/Docker-README.md
+    # https://github.com/PowerDNS/pdns/blob/master/Dockerfile-recursor
+    # https://hub.docker.com/r/powerdns/pdns-recursor-53/tags
+    image: powerdns/pdns-recursor-53:5.3.1
     restart: always
     environment:
       - PDNS_RECURSOR_API_KEY
@@ -12,24 +22,18 @@ services:
       - auth
     dns:
       - ${RECURSOR_DNS:-1.1.1.1}
-  auth: # the server to store our private DNS entries
-    image: powerdns/pdns-auth-46:latest
-    restart: always
-    volumes:
-      - dns-data:/var/lib/powerdns/
-    environment:
-      - PDNS_AUTH_API_KEY
   dnsdist:
-    image: powerdns/dnsdist-17:latest
+    # https://github.com/PowerDNS/pdns/blob/master/Dockerfile-dnsdist
+    # https://hub.docker.com/r/powerdns/dnsdist-20/tags
+    image: powerdns/dnsdist-20:2.0.1
     restart: always
     ports:
-      - '${DNS_PORT:-53}:53'
+      - '${DNS_PORT:-53}:53/tcp'
       - '${DNS_PORT:-53}:53/udp'
     environment:
       - PDNS_AUTH_API_KEY
     volumes:
       - ./dnsdist/01_resolv.conf:/etc/dnsdist/conf.d/01_resolv.conf
-      - ./dnsdist/custom.d/02_private_domain.conf:/etc/dnsdist/conf.d/02_private_domain.conf
       - ./dnsdist/99_recursor.conf:/etc/dnsdist/conf.d/99_recursor.conf
     depends_on:
       - auth
