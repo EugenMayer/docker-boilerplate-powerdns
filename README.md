@@ -40,6 +40,13 @@ docker compose up -d
 
 ## Testing
 
+This will show you an example for
+- running a private dns server for the domain `test.local`
+- running a recursor that will resolve to `1.1.1.1` for any other domain
+- and all that behind dnsdist as the router
+
+Let's start:
+
 ```bash
 git clone -b https://github.com/EugenMayer/docker-boilerplate-powerdns dns
 cd dns
