@@ -35,6 +35,8 @@ services:
     volumes:
       - ./dnsdist/01_resolv.conf:/etc/dnsdist/conf.d/01_resolv.conf
       - ./dnsdist/99_recursor.conf:/etc/dnsdist/conf.d/99_recursor.conf
+      # our default private domain for test.local
+      - ${DNSDIST_PRIVATE_CONF:-./examples/custom.d/dnsdist/02_private_domain.conf}:/etc/dnsdist/conf.d/02_private_domain.conf
     depends_on:
       - auth
       - recursor

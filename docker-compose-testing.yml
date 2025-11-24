@@ -12,9 +12,6 @@ services:
       # webserver
       - '48082:8082'
   dnsdist:
-    volumes:
-      # our default private domain for test.local
-      - ./examples/custom.d/dnsdist/02_private_domain.conf:/etc/dnsdist/conf.d/02_private_domain.conf
     ports:
       - '5053:53/tcp'
       - '5053:53/udp'
